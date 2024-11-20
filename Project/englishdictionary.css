@@ -1,0 +1,43 @@
+body{
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-image: url(Dictionary.jpg);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.container{
+    background-color: rgba(212, 9, 9, 0.725);
+    padding: 28px;
+    border-radius: 7px;
+    box-shadow: 0 10px 10px rgba(0,0,0,.3);
+    width: 90%;
+    margin: 10px;
+    max-width: 600px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.heading{
+    font-size: 28px;
+    font-weight: bolder;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.input{
+    height: 53px;
+    width: 300px;
+    background-color: rgba(255, 255,255, .6);
+    border-color: rgba(255, 255,255, .4);
+    font-size: 16px;
+    padding: 0 42px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.meaning-container{
+    display: none;
+}
