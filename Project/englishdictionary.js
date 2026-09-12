@@ -52,26 +52,24 @@ async function fetchAPI(word) {
         meaningContainerEl.style.display = "none";
         infoTextEl.innerText = `Searching the meaning of "${word}"`;
 
-        const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
-
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error("Word not found");
-        }
+        const response = await fetch(
+            `/api/word?word=${encodeURIComponent(word)}`
+        );
 
         const result = await response.json();
 
-        // Display word
+        if (!response.ok) {
+            throw new Error(result.message || "Word not found");
+        }
+
         titleEl.innerText = result[0].word;
 
-        // Display meaning
         const definition =
             result[0].meanings?.[0]?.definitions?.[0]?.definition;
 
-        meaningEl.innerText = definition || "Meaning not available.";
+        meaningEl.innerText =
+            definition || "Meaning not available.";
 
-        // Find audio pronunciation
         const phonetics = result[0].phonetics || [];
 
         const audio = phonetics.find(
@@ -90,11 +88,10 @@ async function fetchAPI(word) {
         meaningContainerEl.style.display = "block";
 
     } catch (error) {
-        console.error("Dictionary API Error:", error);
+        console.error("Dictionary error:", error);
 
         meaningContainerEl.style.display = "none";
         infoTextEl.style.display = "block";
-
         infoTextEl.innerText =
             "Word not found or an error occurred. Please try again.";
     }
