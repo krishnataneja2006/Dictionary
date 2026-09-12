@@ -62,37 +62,39 @@ async function fetchAPI(word) {
 
         const result = await response.json();
 
-        infoTextEl.style.display = "none";
-        meaningContainerEl.style.display = "block";
-
+        // Display word
         titleEl.innerText = result[0].word;
 
-        meaningEl.innerText =
-            result[0].meanings[0].definitions[0].definition;
+        // Display meaning
+        const definition =
+            result[0].meanings?.[0]?.definitions?.[0]?.definition;
 
-        // Find an available pronunciation audio
-        let audioUrl = null;
+        meaningEl.innerText = definition || "Meaning not available.";
 
-        for (const phonetic of result[0].phonetics || []) {
-            if (phonetic.audio) {
-                audioUrl = phonetic.audio;
-                break;
-            }
-        }
+        // Find audio pronunciation
+        const phonetics = result[0].phonetics || [];
 
-        if (audioUrl) {
-            audioEl.src = audioUrl;
+        const audio = phonetics.find(
+            (phonetic) => phonetic.audio
+        );
+
+        if (audio) {
+            audioEl.src = audio.audio;
             audioEl.style.display = "inline-flex";
         } else {
             audioEl.removeAttribute("src");
             audioEl.style.display = "none";
         }
 
+        infoTextEl.style.display = "none";
+        meaningContainerEl.style.display = "block";
+
     } catch (error) {
-        console.error(error);
+        console.error("Dictionary API Error:", error);
 
         meaningContainerEl.style.display = "none";
         infoTextEl.style.display = "block";
+
         infoTextEl.innerText =
             "Word not found or an error occurred. Please try again.";
     }
