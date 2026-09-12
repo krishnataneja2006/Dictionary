@@ -46,3 +46,52 @@ Dictionary/
     ├── englishdictionary.css
     ├── englishdictionary.js
     └── Dictionary.jpg
+```
+## How to Run
+
+No installation or additional dependencies are required.
+
+### Run Locally
+
+1. Clone this repository.
+2. Open the `Project` folder.
+3. Open `index.html` in a web browser.
+4. Enter any English word in the search box.
+5. Press **Enter** to view its meaning and pronunciation.
+
+### Using Visual Studio Code
+
+1. Open the project in **Visual Studio Code**.
+2. Open the `Project/index.html` file.
+3. Run the project using **Live Server**.
+4. Search for any English word.
+
+> **Note:** An internet connection is required because the project uses the Dictionary API to retrieve word information.
+
+## Example
+
+Search for a word such as:
+
+```text
+job
+```
+The application displays:
+
+- Word title
+- Word meaning
+- Audio pronunciation when available
+
+## Future Improvements
+
+- Add synonyms and antonyms
+- Display example sentences
+- Add search history
+- Improve error and loading messages
+- Improve accessibility
+- Enhance mobile responsiveness
+
+## Author
+
+**Krishna Taneja**
+
+Computer Science Engineering Student
