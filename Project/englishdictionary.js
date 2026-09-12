@@ -6,37 +6,60 @@
 // const audioEl = document.getElementById("audio");
 
 // async function fetchAPI(word) {
-//   try {
-//     infoTextEl.style.display = "block";
-//     meaningContainerEl.style.display = "none";
-//     infoTextEl.innerText = `Searching the meaning of "${word}"`;
-//     const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
-//     const result = await fetch(url).then((res) => res.json());
+//     try {
+//         infoTextEl.style.display = "block";
+//         meaningContainerEl.style.display = "none";
+//         infoTextEl.innerText = `Searching the meaning of "${word}"`;
 
-//     if (result.title) {
-//       meaningContainerEl.style.display = "block";
-//       infoTextEl.style.display = "none";
-//       titleEl.innerText = word;
-//       meaningEl.innerText = "N/A";
-//       audioEl.style.display = "none";
-//     } else {
-//       infoTextEl.style.display = "none";
-//       meaningContainerEl.style.display = "block";
-//       audioEl.style.display = "inline-flex";
-//       titleEl.innerText = result[0].word;
-//       meaningEl.innerText = result[0].meanings[0].definitions[0].definition;
-//       audioEl.src = result[0].phonetics[0].audio;
+//         const response = await fetch(
+//             `/api/word?word=${encodeURIComponent(word)}`
+//         );
+
+//         const result = await response.json();
+
+//         if (!response.ok) {
+//             throw new Error(result.message || "Word not found");
+//         }
+
+//         titleEl.innerText = result[0].word;
+
+//         const definition =
+//             result[0].meanings?.[0]?.definitions?.[0]?.definition;
+
+//         meaningEl.innerText =
+//             definition || "Meaning not available.";
+
+//         const phonetics = result[0].phonetics || [];
+
+//         const audio = phonetics.find(
+//             (phonetic) => phonetic.audio
+//         );
+
+//         if (audio) {
+//             audioEl.src = audio.audio;
+//             audioEl.style.display = "inline-flex";
+//         } else {
+//             audioEl.removeAttribute("src");
+//             audioEl.style.display = "none";
+//         }
+
+//         infoTextEl.style.display = "none";
+//         meaningContainerEl.style.display = "block";
+
+//     } catch (error) {
+//         console.error("Dictionary error:", error);
+
+//         meaningContainerEl.style.display = "none";
+//         infoTextEl.style.display = "block";
+//         infoTextEl.innerText =
+//             "Word not found or an error occurred. Please try again.";
 //     }
-//   } catch (error) {
-//     console.log(error);
-//     infoTextEl.innerText = `an error happened, try again later`;
-//   }
 // }
 
 // inputEl.addEventListener("keyup", (e) => {
-//   if (e.target.value && e.key === "Enter") {
-//     fetchAPI(e.target.value);
-//   }
+//     if (e.key === "Enter" && e.target.value.trim()) {
+//         fetchAPI(e.target.value.trim());
+//     }
 // });
 
 const inputEl = document.getElementById("input");
@@ -52,15 +75,15 @@ async function fetchAPI(word) {
         meaningContainerEl.style.display = "none";
         infoTextEl.innerText = `Searching the meaning of "${word}"`;
 
-        const response = await fetch(
-            `/api/word?word=${encodeURIComponent(word)}`
-        );
+        const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
 
-        const result = await response.json();
+        const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error(result.message || "Word not found");
+            throw new Error("Word not found");
         }
+
+        const result = await response.json();
 
         titleEl.innerText = result[0].word;
 
@@ -70,14 +93,15 @@ async function fetchAPI(word) {
         meaningEl.innerText =
             definition || "Meaning not available.";
 
+        // Find the first phonetic entry that contains an audio URL
         const phonetics = result[0].phonetics || [];
 
-        const audio = phonetics.find(
-            (phonetic) => phonetic.audio
+        const audioData = phonetics.find(
+            (phonetic) => phonetic.audio && phonetic.audio.trim() !== ""
         );
 
-        if (audio) {
-            audioEl.src = audio.audio;
+        if (audioData) {
+            audioEl.src = audioData.audio;
             audioEl.style.display = "inline-flex";
         } else {
             audioEl.removeAttribute("src");
@@ -88,7 +112,7 @@ async function fetchAPI(word) {
         meaningContainerEl.style.display = "block";
 
     } catch (error) {
-        console.error("Dictionary error:", error);
+        console.error("Dictionary API Error:", error);
 
         meaningContainerEl.style.display = "none";
         infoTextEl.style.display = "block";
